@@ -12,3 +12,16 @@ let yAxis
 let width = 800;
 let height = 600;
 let padding = 40;
+
+let svg = d3.select("svg");
+
+let drawCanvas = () => {
+    svg.attr("width", width)
+    svg.attr("height", height)
+};
+
+let generateScales = () => {};
+
+let drawBars = () => {};
+
+let generateAxes = () => {};
