@@ -25,3 +25,9 @@ let generateScales = () => {};
 let drawBars = () => {};
 
 let generateAxes = () => {};
+
+req.open("GET", dataUrl, true);
+req.onload = () => {
+    console.log(req.responseText)
+};
+req.send();
