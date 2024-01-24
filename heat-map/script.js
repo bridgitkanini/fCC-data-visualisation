@@ -23,6 +23,13 @@ let drawAxes = () => {};
 
 req.open("GET", dataUrl, true); //Req methods to display data on live server console.
 req.onload = () => {
-    console.log(req.responseText)
+    let object = JSON.parse(req.responseText) //Fetching JSON Data.
+    baseTemp = object["baseTemperature"] // Reorganise/ pass into defined variables baseTemp & values.
+    values = object["monthlyVariance"]
+    console.log(baseTemp)
+    console.log(values)
+    generateScales()
+    drawCells()
+    drawAxes()
 };
 req.send();
