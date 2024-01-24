@@ -1,4 +1,4 @@
-let dataUrl ="";
+let dataUrl ="https://raw.githubusercontent.com/freeCodeCamp/ProjectReferenceData/master/global-temperature.json";
 let req = new XMLHttpRequest();
 
 let baseTemp
@@ -20,3 +20,9 @@ let generateScales = () => {};
 let drawCells = () => {};
 
 let drawAxes = () => {};
+
+req.open("GET", dataUrl, true); //Req methods to display data on live server console.
+req.onload = () => {
+    console.log(req.responseText)
+};
+req.send();
