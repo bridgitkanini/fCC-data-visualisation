@@ -28,6 +28,12 @@ let generateAxes = () => {};
 
 req.open("GET", dataUrl, true);
 req.onload = () => {
-    console.log(req.responseText)
+    data = JSON.parse(req.responseText)
+    values = data.data
+    console.log(values)
+    drawCanvas()
+    generateScales()
+    drawBars()
+    generateAxes()
 };
 req.send();
