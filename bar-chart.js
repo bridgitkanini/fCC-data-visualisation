@@ -50,6 +50,14 @@ let generateScales = () => {
 };
 
 let drawBars = () => {
+
+    let tooltip = d3.select("body")
+                    .append("div")
+                    .attr("id", "tooltip")
+                    .style("visibility", "hidden") 
+                    .style("width", "auto")
+                    .style("height", "auto");
+
     svg.selectAll("rect")
         .data(values)
         .enter()
@@ -70,14 +78,26 @@ let drawBars = () => {
         })
         .attr("y", (item) => {
             return (height - padding) - yScale(item[1]) //Inverted, then plotted according to correct height, ie, yScale.
-        });
+        })
+        .on('mouseover', (item) => {
+            tooltip.transition()
+                .style('visibility', 'visible')
+
+            tooltip.text(item[0])
+
+            document.querySelector('#tooltip').setAttribute('data-date', item[0])
+        })
+        .on('mouseout', (item) => {
+            tooltip.transition()
+                .style('visibility', 'hidden')
+        }) 
 };
 
 let generateAxes = () => {
 
     let xAxis = d3.axisBottom(xAxisScale); //Automatically includes a class="tick" for each data label.
 
-    svg.append("g") //Create g element
+    svg.append("g") //HTML Create g element
         .call(xAxis)
         .attr("id", "x-axis") //g element with id="x-axis"
         .attr("transform", "translate(0, " + (height - padding) + ")"); //Push x-axis-scale from the top of the page to bottom.
