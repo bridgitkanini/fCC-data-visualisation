@@ -6,8 +6,8 @@ let values
 
 let yScale
 let xScale
-let xAxis
-let yAxis
+let xAxisScale
+let yAxisScale
 
 let width = 800;
 let height = 600;
@@ -38,12 +38,12 @@ let generateScales = () => {
     
     console.log(datesArray);
                     
-    xAxis = d3.scaleTime()
+    xAxisScale = d3.scaleTime()
                 .domain([d3.min(datesArray), d3.max(datesArray)])
                 .range([padding, width - padding]);
 
-    yAxis = d3.scaleLinear()
-                .domain([0, d.max(values, (item) => {
+    yAxisScale = d3.scaleLinear()
+                .domain([0, d3.max(values, (item) => {
                     return item[1]
                 })])
                 .range([height-padding, padding])
@@ -51,7 +51,22 @@ let generateScales = () => {
 
 let drawBars = () => {};
 
-let generateAxes = () => {};
+let generateAxes = () => {
+
+    let xAxis = d3.axisBottom(xAxisScale); //Automatically includes a class="tick" for each data label.
+
+    svg.append("g") //Create g element
+        .call(xAxis)
+        .attr("id", "x-axis") //g element with id="x-axis"
+        .attr("transform", "translate(0, " + (height - padding) + ")"); //Push x-axis-scale from the top of the page to bottom.
+
+    let yAxis = d3.axisLeft(yAxisScale); //Automatically includes a class="tick" for each data label.
+
+    svg.append("g")
+        .call(yAxis)
+        .attr("id", "y-axis") 
+        .attr("transform", "translate(" + padding + ", 0)"); // 0 comes in last here, not first like x-axis.
+};
 
 req.open("GET", dataUrl, true);
 req.onload = () => {
