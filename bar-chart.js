@@ -49,7 +49,29 @@ let generateScales = () => {
                 .range([height-padding, padding])
 };
 
-let drawBars = () => {};
+let drawBars = () => {
+    svg.selectAll("rect")
+        .data(values)
+        .enter()
+        .append("rect")
+        .attr("class", "bar")
+        .attr("width", (width -(2*padding)) / values.length)
+        .attr("data-date", (item) => {
+            return item[0]
+        })
+        .attr("data-gdp", (item) => {
+            return item[1]
+        })
+        .attr("height", (item) => { //Plotting bars on chart.
+            return yScale(item[1])
+        })
+        .attr("x", (item, index) => { //Aligning bars with the corresponding value on the x-axis.
+            return xScale(index)
+        })
+        .attr("y", (item) => {
+            return (height - padding) - yScale(item[1]) //Inverted, then plotted according to correct height, ie, yScale.
+        });
+};
 
 let generateAxes = () => {
 
