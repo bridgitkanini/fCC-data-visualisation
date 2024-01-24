@@ -3,13 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Scatterplot Graph</title>
-    <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
     <link rel="stylesheet" href="./scatterplot-graph.css">
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <title>Scatterplot Graph</title>
 </head>
 <body>
-    <svg id="canvas"></svg>
+    <svg id='canvas'>
+        <text id='title' y='20' x='150'>Doping in Professional Bicycle Racing</text>
+    </svg>
+    <div id='legend'>
+        YEAR (x) vs TIME (Y) </br />
+        Orange = Doping Allegation | 
+        Green = No Doping Allegations
+    </div>
+    <div id='tooltip'>
+
+    </div>
 </body>
-<script src="./scatterplot-graph.js"></script>
-<script src="https://cdn.freecodecamp.org/testable-projects-fcc/v1/bundle.js"></script>
+<script defer src='./scatterplot-graph.js'></script>
+<script defer src='https://cdn.freecodecamp.org/testable-projects-fcc/v1/bundle.js'></script>
 </html>
