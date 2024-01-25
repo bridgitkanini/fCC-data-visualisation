@@ -18,6 +18,8 @@ let canvas = d3.select("#canvas");
 canvas.attr("width", width);
 canvas.attr("height", height);
 
+let tooltip = d3.select("#tooltip");
+
 let generateScales = () => {
 
     minYear = d3.min(values, (item) => {
@@ -29,11 +31,11 @@ let generateScales = () => {
     })
 
     xScale = d3.scaleLinear()
-                .domain([minYear, maxYear]) //Can add +1 to maxYear bc data goes to 2015 but scale ends at 2000.
+                .domain([minYear, maxYear + 1]) //Can add +1 to maxYear bc data goes to 2015 but scale ends at 2000. (I added 5, xAxis went up to 2020 instead of 2000; happy accident lol.)
                 .range([padding, width - padding]);
 
     yScale = d3.scaleTime()
-                .domain([new Date(0, 0 , 0, 0, 0, 0), new Date(0, 12 , 0, 0, 0, 0)]) //12 not 11 for 12 gaps, one for each. Literature at https://www.w3schools.com/js/js_dates.asp  
+                .domain([new Date(0, 0, 0, 0, 0, 0), new Date(0, 12, 0, 0, 0, 0)]) //12 not 11 for 12 gaps, one for each. Literature at https://www.w3schools.com/js/js_dates.asp  
                 .range([padding, height - padding]);
 };
 
@@ -70,7 +72,7 @@ let drawCells = () => {
             })
             .attr("height", (height - (2*padding)) / 12)
             .attr("y", (item) => {
-                return yScale(new Date(0, item["month"] - 1 , 0, 0, 0, 0)) //Aligning cells to the months, Naming the months appropriately, -1 to start from January..
+                return yScale(new Date(0, item["month"] - 1, 0, 0, 0, 0)) //Aligning cells to the months, Naming the months appropriately, -1 to start from January..
             })
             .attr("width", (item) => {
                 let numberOfYears = maxYear - minYear;
@@ -78,7 +80,34 @@ let drawCells = () => {
             })
             .attr("x", (item) => {
                 return xScale(item["year"])
-            });
+            })
+            .on("mouseover", (item) => {
+                tooltip.transition()
+                        .style("visibily", "visible")
+
+                let monthNames = [
+                    "January", 
+                    "February", 
+                    "March", 
+                    "April", 
+                    "May", 
+                    "June",
+                    "July", 
+                    "August", 
+                    "September", 
+                    "October", 
+                    "November", 
+                    "December"
+                ]
+
+                tooltip.text(item['year'] + ' ' + monthNames[item['month'] -1 ] + ' : ' + item['variance'])
+
+                tooltip.attr('data-year', item['year'])
+            })
+            .on('mouseout', (item) => {
+                tooltip.transition()
+                        .style('visibility', 'hidden')
+            })
 };
 
 let drawAxes = () => {
@@ -91,7 +120,8 @@ let drawAxes = () => {
             .attr("id", "x-axis")
             .attr("transform", "translate(0, " + (height - padding) +")");
 
-    let yAxis = d3.axisLeft(yScale);
+    let yAxis = d3.axisLeft(yScale)
+                    .tickFormat(d3.timeFormat("%B")); //Formats the date object into a string representing the full month name.
 
     canvas.append("g")
             .call(yAxis)
